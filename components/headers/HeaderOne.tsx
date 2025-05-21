@@ -3,17 +3,14 @@ import React, { Suspense } from "react";
 import Logo from "../logo/Logo";
 import Link from "next/link";
 import SearchBox from "./SearchBox";
-import Cart from "../carts/Cart";
 import { ThemeToggle } from "../theme/ThemeToggle";
 import AccountPopover from "../account/AccountPopover";
-import {  Search } from "lucide-react";
+import { Search } from "lucide-react";
 import MobileHeader from "./MobileHeader";
 import { Separator } from "../ui/separator";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useMobileSearchModal } from "@/store/mobileSearchStore";
-import Loader from "../others/Loader";
-import DropdownMenuComponent from "../others/DropdownMenu";
 
 const HeaderOne = () => {
   const pathname = usePathname();
@@ -28,31 +25,40 @@ const HeaderOne = () => {
       label: "Shop",
       link: "/shop",
       isActive: pathname.startsWith("/shop"),
-    }
+    },
+    {
+      label: "About",
+      link: "/about",
+      isActive: pathname === "/about",
+    },
+    {
+      label: "Contact",
+      link: "/contact",
+      isActive: pathname === "/contact",
+    },
   ];
 
   const { openModal } = useMobileSearchModal();
 
   return (
     <header className="sticky bg-white dark:bg-slate-950 top-0 z-50 w-full">
-      <div className="max-w-screen-xl mx-auto  p-4 md:py-4 md:px-8 flex items-center justify-between gap-2">
+      <div className="max-w-screen-xl mx-auto p-4 md:py-4 md:px-8 flex items-center justify-between gap-2">
         <Logo />
-        <ul className="hidden lg:flex items-center gap-4 xl:gap-6 text-lg ">
+        <ul className="hidden lg:flex items-center gap-4 xl:gap-6 text-lg">
           {links.map((link) => (
             <Link
               key={link.link}
               className={cn(
                 "font-medium px-4 py-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800",
-                link.isActive && "bg-gray-200 dark:bg-gray-800  rounded-full"
+                link.isActive && "bg-gray-200 dark:bg-gray-800 rounded-full"
               )}
               href={link.link}
             >
               {link.label}
             </Link>
           ))}
-          <DropdownMenuComponent />
         </ul>
-        <div className="flex items-center gap-6 ">
+        <div className="flex items-center gap-6">
           {/* mobile search option */}
           <div className="lg:hidden text-center">
             <Search size={25} onClick={openModal} />
@@ -68,7 +74,6 @@ const HeaderOne = () => {
               <ThemeToggle />
             </div>
             <AccountPopover />
-            <Cart />
             <MobileHeader />
           </div>
         </div>

@@ -1,12 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import RatingReview from "../others/RatingReview";
 import Link from "next/link";
 import Image from "next/image";
 import ProductOptions from "./ProductOptions";
 import { Product } from "@/types";
-import { calculateDiscount } from "@/lib/calculateDiscount";
 import { useRouter } from "next/navigation";
+import Rating from "../others/Rating";
 
 const SingleProductCartView = ({ product }: { product: Product }) => {
   const [isMounted, setIsMounted] = useState(false);
@@ -15,18 +14,13 @@ const SingleProductCartView = ({ product }: { product: Product }) => {
 
   const {
     category,
-    discount,
     id,
     images,
     name,
-    price,
     rating,
-    reviews,
     stockItems,
   } = product;
 
-  // Calculate discounted price
-  const discountedPrice = calculateDiscount(price, discount);
 
   useEffect(() => {
     setIsMounted(true);
@@ -50,7 +44,6 @@ const SingleProductCartView = ({ product }: { product: Product }) => {
             </p>
           ) : (
             <p className="py-1 px-4 text-sm font-bold rounded-sm bg-rose-500 text-white absolute top-2 right-2">
-              {product.discount}% off
             </p>
           )}
         </div>
@@ -73,11 +66,9 @@ const SingleProductCartView = ({ product }: { product: Product }) => {
           {name.slice(0, 45)}
           {name.length > 45 && "..."}
         </h3>
-        <RatingReview rating={rating} review={reviews.length} />
+        <Rating rating={rating}/>
         <div className="text-lg font-bold space-x-3 ">
-          <span className="line-through text-muted-foreground">${price}</span>
           <span className="text-xl font-bold text-green-500">
-            ${discountedPrice.toFixed(2)}
           </span>
         </div>
       </div>

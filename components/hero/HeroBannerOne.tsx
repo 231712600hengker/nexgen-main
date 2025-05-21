@@ -43,7 +43,6 @@ const HeroBannerOne = () => {
                 >
                   <p className="flex items-center justify-center gap-4 -mb-4 text-xl font-bold rounded-xl  text-rose-600">
                     <Rocket className="animate-bounce" size={40} />
-                    <span className="text-blue-800">{data.discountText}</span>
                   </p>
                   <h2
                     className={cn(

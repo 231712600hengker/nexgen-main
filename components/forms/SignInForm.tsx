@@ -1,5 +1,6 @@
 'use client';
 import React from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -9,15 +10,16 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { FaGoogle } from "react-icons/fa6";
 
-// Define Zod schema for form validation
+// Ubah validasi agar username boleh tanpa format email
 const signInSchema = z.object({
-  email: z.string().email("Invalid email"),
-  password: z.string().min(6, "Password must be at least 6 characters")
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(1, "Password is required"),
 });
 
 type SignInFormData = z.infer<typeof signInSchema>;
 
 const SignInForm = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -27,7 +29,15 @@ const SignInForm = () => {
   });
 
   const onSubmit = (data: SignInFormData) => {
-    console.log(data); // Handle form submission
+    const { username, password } = data;
+
+    if (username === "admin123" && password === "12345") {
+      router.push("/DashboardPageOne");
+    } else if (username === "user123" && password === "12345") {
+      router.push("/HomePageOne");
+    } else {
+      alert("Invalid credentials");
+    }
   };
 
   return (
@@ -44,41 +54,33 @@ const SignInForm = () => {
         </div>
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           <div>
-            <Label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Email Address
+            <Label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Username
             </Label>
             <Input
-              type="email"
-              id="email"
-              placeholder="you@example.com"
-              className={`w-full border ${
-                errors.email ? "border-red-500" : "border-gray-300"
-              } dark:border-gray-700 rounded-lg px-4 py-2 focus:outline-none`}
-              {...register("email")}
+              type="text"
+              id="username"
+              placeholder="admin123 or user123"
+              className={`w-full border ${errors.username ? "border-red-500" : "border-gray-300"
+                } dark:border-gray-700 rounded-lg px-4 py-2 focus:outline-none`}
+              {...register("username")}
             />
-            {errors.email && (
+            {errors.username && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
+                {errors.username.message}
               </p>
             )}
           </div>
           <div>
-            <Label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <Label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Password
             </Label>
             <Input
               type="password"
               id="password"
               placeholder="********"
-              className={`w-full border ${
-                errors.password ? "border-red-500" : "border-gray-300"
-              } dark:border-gray-700 rounded-lg px-4 py-2 focus:outline-none`}
+              className={`w-full border ${errors.password ? "border-red-500" : "border-gray-300"
+                } dark:border-gray-700 rounded-lg px-4 py-2 focus:outline-none`}
               {...register("password")}
             />
             {errors.password && (

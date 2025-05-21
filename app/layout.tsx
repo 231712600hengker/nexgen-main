@@ -13,8 +13,8 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "techbazer",
-  description: "your ultimate gadgets shop",
+  title: "NexGen Electronics",
+  description: "Your Ultimate Gadgets Shop",
 };
 
 export default function RootLayout({

@@ -1,6 +1,4 @@
-import OrderSummaryForCheckout from "@/components/carts/OrderSummaryForCheckout";
 import CheckoutForm from "@/components/forms/CheckoutForm";
-import CouponCodeForm from "@/components/forms/CouponCodeForm";
 import { Separator } from "@/components/ui/separator";
 import React from "react";
 
@@ -24,10 +22,7 @@ const CheckoutPageOne = () => {
               </h2>
               <CheckoutForm />
             </div>
-              <CouponCodeForm />
           </div>
-          {/* Order Summary */}
-          <OrderSummaryForCheckout />
         </div>
       </div>
     </section>

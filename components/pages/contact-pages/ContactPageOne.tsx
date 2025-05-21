@@ -1,35 +1,45 @@
 import ContactForm from "@/components/forms/ContactForm";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Locate, Mail, Phone, Plane, PlaneTakeoff } from "lucide-react";
+import { Locate, Mail, Phone,} from "lucide-react";
 import React from "react";
 
 const ContactPageOne = () => {
   return (
-    <section className="max-w-screen-xl mx-auto p-2 md:p-8">
-      <h2 className="text-4xl my-2 font-bold text-center">Get In Touch</h2>
-      <div className="flex flex-col md:flex-row  md:max-h-[50rem] gap-4 overflow-hidden  dark:bg-slate-900 rounded-md shadow">
-        
-        {/* contact form */}
-        <div className="w-full flex-1">
-        <ContactForm />
+    <section className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-slate-100 dark:bg-slate-900">
+      <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white">
+        Get In Touch
+      </h2>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Contact Form */}
+        <div className="lg:col-span-2">
+          <ContactForm />
         </div>
-        {/* contect us information */}
-        <div className=" bg-blue-600 w-full md:w-fit md:min-h-screen p-2 lg:p-8">
-          <h3 className="text-xl font-semibold text-center mt-4">Contact Us</h3>
-          <div className="flex items-center md:items-start w-full h-full justify-start mt-4 flex-col gap-6 md:text-xl">
-            <div className="flex items-center gap-4">
-              <Locate size={40} />
-              <p className="whitespace-nowrap">gazipur, dhaka, bangladesh</p>
+
+        {/* Contact Information */}
+        <div className="bg-blue-600 text-white dark:bg-blue-700 rounded-lg shadow-md p-6 md:p-10 h-fit flex flex-col justify-between">
+          <h3 className="text-2xl font-semibold text-center mb-6">
+            Contact Us
+          </h3>
+          <div className="space-y-6 text-lg">
+            <div className="flex items-start gap-4">
+              <Locate size={32} />
+              <div>
+                <p className="font-medium">Address</p>
+                <p className="text-sm">123 Main Street, City, Country</p>
+              </div>
             </div>
-            <div className="flex items-center gap-4 ">
-              <Phone size={40} />
-              <p>+1 000 000 000</p>
+            <div className="flex items-start gap-4">
+              <Phone size={32} />
+              <div>
+                <p className="font-medium">Phone</p>
+                <p className="text-sm">+123 456 7890</p>
+              </div>
             </div>
-            <div className="flex gap-4 items-center">
-              <Mail size={40} />
-              www.example@gmail.com{" "}
+            <div className="flex items-start gap-4">
+              <Mail size={32} />
+              <div>
+                <p className="font-medium">Email</p>
+                <p className="text-sm">info@example.com</p>
+              </div>
             </div>
           </div>
         </div>
@@ -37,5 +47,6 @@ const ContactPageOne = () => {
     </section>
   );
 };
+
 
 export default ContactPageOne;

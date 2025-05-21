@@ -1,8 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
-
-import AddToCartBtn from "@/components/buttons/AddToCartBtn";
 import useWishlistStore from "@/store/wishlistStore";
 import Image from "next/image";
 import Link from "next/link";
@@ -67,9 +65,6 @@ const WishlistPage = () => {
                 </div>
               </div>
               <div className="p-4 flex items-center justify-between">
-                <AddToCartBtn
-                  product={{ ...cart, quantity: 1, selectedColor: "" }}
-                />
               </div>
             </div>
           ))}

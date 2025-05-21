@@ -7,7 +7,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import useCartStore from "@/store/cartStore";
 import useWishlistStore from "@/store/wishlistStore";
 import { showToast } from "@/lib/showToast";
 import { Product } from "@/types";
@@ -18,8 +17,6 @@ const ProductOptions = ({ product }: { product: Product }) => {
   const [isMounted, setIsMounted] = useState(false);
   const { openModal } = useProductQuickViewStore();
   const { images, name } = product;
-
-  const { addToCart } = useCartStore();
   const { addToWishlist, isInWishlist } = useWishlistStore();
 
   useEffect(() => {
@@ -29,11 +26,6 @@ const ProductOptions = ({ product }: { product: Product }) => {
   if (!isMounted) {
     return <Loader />;
   }
-
-  const handleAddToCart = () => {
-    addToCart({ ...product, quantity: 1, selectedColor: "" });
-    showToast("Item Added To Cart", images[0], name);
-  };
 
   const handleAddToWishList = () => {
     if (isInWishlist(product.id)) {
@@ -78,19 +70,6 @@ const ProductOptions = ({ product }: { product: Product }) => {
           </TooltipTrigger>
           <TooltipContent>
             <p>Quick View</p>
-          </TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger>
-            <div
-              onClick={handleAddToCart}
-              className="p-2 rounded-lg mr-1 bg-slate-900 text-white"
-            >
-              <ShoppingBag />
-            </div>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Add To Cart</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

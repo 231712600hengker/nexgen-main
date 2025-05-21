@@ -1,20 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import BuyNowBtn from "../buttons/BuyNowBtn";
-import AddToCartBtn from "../buttons/AddToCartBtn";
 import ProductDescription from "../product/ProductDescription";
-import RatingReview from "../others/RatingReview";
+import Rating from "../others/Rating";
 import ProductGallery from "../product/ProductGallery";
 import { useProductQuickViewStore } from "@/store/productQuickViewStore";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
-import ProductColorSelection from "../product/ProductColorSelection";
-import ProductQuantityChange from "../product/ProductQuantityChange";
 import ProductTab from "../product/ProductTab";
-import { calculateDiscount } from "@/lib/calculateDiscount";
+
 
 const ProductQuickViewModal = () => {
-  const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
   const { isOpen, closeModal, product } = useProductQuickViewStore();
 
@@ -67,9 +62,8 @@ const ProductQuickViewModal = () => {
                     {product.name}
                   </h2>
                   {/* Rating and Review */}
-                  <RatingReview
+                  <Rating
                     rating={product.rating || 0}
-                    review={product.reviews.length || 0}
                   />
                   {/* Product Description */}
                   <ProductDescription description={product.description} />
@@ -86,46 +80,21 @@ const ProductQuickViewModal = () => {
                       </p>
                     )}
                   </div>
-
-                  {/* product colors */}
-                  <ProductColorSelection
-                    allColors={product.color!}
-                    color={selectedColor}
-                    setColor={setSelectedColor}
-                  />
-
                   <div className="flex items-center gap-6 !my-4">
                     <div className="">
                       {/* Original Price */}
                       <p className="text-muted-foreground line-through">
-                        ${product.price}
-                      </p>
-                      {/* Discounted Price */}
-                      <p className="text-3xl font-bold text-green-500">
-                        ${calculateDiscount(product.price, product.discount)}
+                        Rp{product.price}
                       </p>
                     </div>
-                    <ProductQuantityChange
-                      quantity={quantity}
-                      setQuantity={setQuantity}
-                    />
                   </div>
                   <div
                     className="flex flex-col md:flex-row items-center gap-2"
                     onClick={closeModal}
                   >
-                    {/* Add To Cart Button */}
-                    <AddToCartBtn
-                      product={{ ...product, quantity, selectedColor }}
-                    />
-                    {/* Buy Now Button */}
-                    <BuyNowBtn
-                      product={{ ...product, quantity, selectedColor }}
-                    />
                   </div>
                   <ProductTab
                     aboutItem={product?.aboutItem!}
-                    reviews={product.reviews}
                   />
                 </div>
               </div>

@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          Int            @id @default(autoincrement())
+  name        String
+  category    String
+  description String
+  price       Int
+  rating      Float?
+  stockItems  Int
+  brand       String?
+  aboutItems  AboutItem[]    @relation("ProductAboutItems")
+  images      ProductImage[] @relation("ProductImages")
+}
+
+model AboutItem {
+  id        Int     @id @default(autoincrement())
+  content   String
+  productId Int
+  product   Product @relation("ProductAboutItems", fields: [productId], references: [id])
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  imageUrl  String
+  productId Int
+  product   Product @relation("ProductImages", fields: [productId], references: [id])
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  phone     String?
+  address   String?
+  image     String?
+  orders    Order[]  // relation ke Order
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id              Int         @id @default(autoincrement())
+  orderNumber     String      @unique
+  customerId      Int
+  customer        Customer    @relation(fields: [customerId], references: [id])
+  status          String
+  shippingAddress String
+  city            String
+  country         String
+  totalAmount     Int
+  date            DateTime
+  items           OrderItem[]
+  isRecent        Boolean     @default(true)
+
+  @@index([isRecent, date])
+}
+
+model OrderItem {
+  id        Int    @id @default(autoincrement())
+  orderId   Int
+  name      String
+  price     Int
+  quantity  Int
+  image     String
+  order     Order  @relation(fields: [orderId], references: [id])
+}

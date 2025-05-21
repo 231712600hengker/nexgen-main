@@ -11,7 +11,6 @@ interface ShopPageOneProps {
     search: string;
     min: string;
     max: string;
-    color: string;
   };
 }
 

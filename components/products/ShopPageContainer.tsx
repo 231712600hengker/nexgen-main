@@ -45,13 +45,7 @@ const ShopPageContainer = ({
       );
     }
 
-    // Filter by color
-    if (searchParams.color) {
-      filteredProducts = filteredProducts.filter((product) =>
-        product?.color.includes(searchParams.color)
-      );
-    }
-
+  
     // Filter by min and max price
     if (searchParams.min && searchParams.max) {
       const minPrice = parseFloat(searchParams.min);

@@ -7,15 +7,13 @@ import { brandsData } from "@/data/brands/brandsdata";
 import { Label } from "../ui/label";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Button } from "../ui/button";
-import { colors } from "@/data/products/productColor";
 import { dummyCategories } from "@/data/category/categoryData";
 
 const FilterProducts = () => {
   // State variables for filters
-  const [minValue, setMinValue] = useState(10);
-  const [maxValue, setMaxValue] = useState(5000);
+  const [minValue, setMinValue] = useState(1000000); // Default min: 1jt IDR
+  const [maxValue, setMaxValue] = useState(100000000); // Default max: 100jt IDR
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
 
   // Access search params
@@ -24,18 +22,18 @@ const FilterProducts = () => {
   const pathname = usePathname();
 
   // Get filter values from search params on initial render
-  const initialPrice = searchParams.get("max") || "5000";
+  const initialMinPrice = searchParams.get("min") || "1000000";
+  const initialMaxPrice = searchParams.get("max") || "100000000";
   const initialCategory = searchParams.get("category");
-  const initialColor = searchParams.get("color");
   const initialBrand = searchParams.get("brand");
 
   // Update state with initial values
   useEffect(() => {
-    setMaxValue(Number(initialPrice));
+    setMinValue(Number(initialMinPrice));
+    setMaxValue(Number(initialMaxPrice));
     setSelectedCategory(initialCategory as string);
-    setSelectedColor(initialColor as string);
     setSelectedBrand(initialBrand as string);
-  }, [initialPrice, initialCategory, initialColor, initialBrand]);
+  }, [initialMinPrice, initialMaxPrice, initialCategory, initialBrand]);
 
   // Selection handler functions with search param updates
   const handleCategorySelection = (category: string) => {
@@ -49,21 +47,21 @@ const FilterProducts = () => {
     router.push(`${pathname}?${newSearchParams}`);
   };
 
-  // Update min price and max price with correct values
+  // Update min price
   const handleMinPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newMinValue = Number(event.target.value);
     setMinValue(newMinValue);
     setMinAndMaxPrice(newMinValue, maxValue);
   };
 
-  // Update max price with correct value
+  // Update max price
   const handleMaxPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newMaxValue = Number(event.target.value);
     setMaxValue(newMaxValue);
     setMinAndMaxPrice(minValue, newMaxValue);
   };
 
-  // Update search params with correct price range
+  // Update price range in URL
   const setMinAndMaxPrice = (minPrice: number, maxPrice: number) => {
     const min = Math.min(minPrice, maxPrice);
     const max = Math.max(minPrice, maxPrice);
@@ -74,15 +72,11 @@ const FilterProducts = () => {
     router.push(`${pathname}?${newSearchParams}`);
   };
 
-  const handleColorSelection = (color: string) => {
-    const newSearchParams = new URLSearchParams(searchParams);
-    if (color === selectedColor) {
-      newSearchParams.delete("color");
-    } else {
-      newSearchParams.set("color", color.split("-")[0]);
-    }
-    setSelectedColor(color);
-    router.push(`${pathname}?${newSearchParams}`);
+  // Handle price range slider change
+  const handleRangeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newMaxValue = Number(event.target.value);
+    setMaxValue(newMaxValue);
+    setMinAndMaxPrice(minValue, newMaxValue);
   };
 
   const handleBrandSelection = (brand: string) => {
@@ -97,14 +91,29 @@ const FilterProducts = () => {
   };
 
   const clearFilter = () => {
-    router.push(`${pathname}?page=1`);
+    // Reset to default values
+    setMinValue(1000000);
+    setMaxValue(100000000);
+    setSelectedCategory("");
+    setSelectedBrand("");
+    router.push(`${pathname}`);
+  };
+
+  // Format price to IDR
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0
+    }).format(price);
   };
 
   return (
-    <aside className="w-72 p-2 space-y-4 ">
+    <aside className="w-72 p-2 space-y-4">
       <h2 className="text-xl font-bold capitalize my-2">Filter Products</h2>
       <Separator />
-      {/* filter by price */}
+      
+      {/* Filter by price */}
       <div>
         <h3 className="text-lg font-medium my-2">By Price</h3>
         <div className="flex items-center justify-between gap-4">
@@ -112,9 +121,10 @@ const FilterProducts = () => {
             <Label htmlFor="min">Min :</Label>
             <Input
               id="min"
-              placeholder="$10"
+              placeholder="Rp1.000.000"
               value={minValue}
-              min={2}
+              min={100000}
+              max={100000000}
               type="number"
               onChange={handleMinPriceChange}
             />
@@ -123,27 +133,32 @@ const FilterProducts = () => {
             <Label htmlFor="max">Max :</Label>
             <Input
               id="max"
-              placeholder="$2000"
-              min={2}
+              placeholder="Rp100.000.000"
+              min={100000}
+              max={100000000}
               value={maxValue}
               type="number"
               onChange={handleMaxPriceChange}
             />
           </div>
         </div>
-        <div className="flex items-center justify-center flex-wrap">
+        <div className="mt-4">
           <Input
-            onChange={handleMaxPriceChange}
+            onChange={handleRangeChange}
             type="range"
-            min={5}
-            max={5000}
+            min={100000}
+            max={100000000}
+            step={1000000}
             value={maxValue}
+            className="w-full"
           />
-          <p className="text-center text-green-500 text-2xl">${maxValue}</p>
+          <p className="text-center text-green-500 text-lg">
+            {formatPrice(minValue)} - {formatPrice(maxValue)}
+          </p>
         </div>
       </div>
 
-      {/* filter by category */}
+      {/* Filter by category */}
       <div>
         <h3 className="text-lg font-medium my-2">By Categories</h3>
         <div className="flex items-center justify-start gap-2 flex-wrap">
@@ -163,30 +178,7 @@ const FilterProducts = () => {
         </div>
       </div>
 
-      {/* filter by Colors */}
-      <div>
-        <h3 className="text-lg font-medium my-2">By Colors</h3>
-        <div className="flex items-center justify-start gap-2 flex-wrap">
-          {colors.map((color) => (
-            <p
-              onClick={() => handleColorSelection(color)}
-              className={cn(
-                "px-4 py-1 rounded-full bg-slate-200 dark:bg-slate-700  flex items-center justify-start gap-3 cursor-pointer",
-                color === selectedColor && "bg-blue-400 dark:bg-blue-700"
-              )}
-              key={color}
-            >
-              <span
-                className={`w-6 h-6 rounded-full border opacity-80`}
-                style={{ backgroundColor: color }}
-              />
-              {color.split("-")[0]}
-            </p>
-          ))}
-        </div>
-      </div>
-
-      {/* filter by Brand name */}
+      {/* Filter by Brand name */}
       <div>
         <h3 className="text-lg font-medium my-2">By Brands</h3>
         <div className="flex items-center justify-start gap-2 flex-wrap">
@@ -204,6 +196,7 @@ const FilterProducts = () => {
           ))}
         </div>
       </div>
+      
       <div>
         <Button onClick={clearFilter} variant={"outline"} className="w-full">
           Clear Filter

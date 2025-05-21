@@ -1,18 +1,14 @@
 "use client";
 import React from "react";
-import RatingReview from "../others/RatingReview";
 import Link from "next/link";
 import Image from "next/image";
 import AddToWishlistBtn from "../buttons/AddToWishlistBtn";
-import AddToCartBtn from "../buttons/AddToCartBtn";
 import { Product } from "@/types";
-import { calculateDiscount } from "@/lib/calculateDiscount";
+
 
 const SingleProductListView = ({ product }: { product: Product }) => {
-  const { category, discount, id, images, name, price, rating, reviews } =
+  const { category, id, images, name,} =
     product;
-
-  const discountPrice = calculateDiscount(price, discount);
 
   return (
     <Link
@@ -30,12 +26,6 @@ const SingleProductListView = ({ product }: { product: Product }) => {
             {name.length > 45 && "..."}
           </h3>
         </div>
-        <RatingReview rating={rating} review={reviews.length} />
-        <div className="text-lg font-bold space-x-2 my-4 ">
-          <span className="line-through text-muted-foreground">${price}</span>
-          <span className="text-xl font-bold text-green-500">
-            ${discountPrice}
-          </span>
         </div>
         <div className=" text-sm">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis numquam
@@ -48,10 +38,6 @@ const SingleProductListView = ({ product }: { product: Product }) => {
           onClick={(e) => e.preventDefault()}
         >
           <AddToWishlistBtn product={product} />
-          <AddToCartBtn
-            product={{ ...product, quantity: 1, selectedColor: "" }}
-          />
-        </div>
       </div>
     </Link>
   );

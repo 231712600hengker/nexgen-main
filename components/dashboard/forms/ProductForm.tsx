@@ -17,7 +17,6 @@ const productSchema = z.object({
   description: z.string().min(1, "Description is required"),
   aboutItem: z.string().optional(),
   images: z.array(z.instanceof(File)).min(1, "At least one image is required"),
-  color: z.array(z.string()).optional(),
   discount: z.number().min(0).max(100).optional(),
 });
 
@@ -33,7 +32,6 @@ const ProductForm = () => {
     description: "",
     aboutItem: '',
     images: [],
-    color: [],
     discount: undefined,
   });
 
@@ -57,7 +55,6 @@ const ProductForm = () => {
       description: "",
       aboutItem: '',
       images: [],
-      color: [],
       discount: undefined,
     });
   };
@@ -196,25 +193,6 @@ const ProductForm = () => {
             <span className="text-red-500">{errors.description.message}</span>
           )}
         </div>
-
-
-        <div>
-          <Label
-            htmlFor="description"
-            className="block text-sm font-medium text-gray-700 dark:text-white"
-          >
-            Available Colors
-          </Label>
-          <Input
-            id="description"
-            className="mt-1 p-2 block border dark:bg-slate-950 w-full rounded-md border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
-            {...register("color")}
-          />
-          {errors.color && (
-            <span className="text-red-500">{errors.color.message}</span>
-          )}
-        </div>
-
         <div>
           <Label
             htmlFor="aboutItem"
