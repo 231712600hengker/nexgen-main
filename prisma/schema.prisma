@@ -18,6 +18,8 @@ model Product {
   brand       String?
   aboutItems  AboutItem[]    @relation("ProductAboutItems")
   images      ProductImage[] @relation("ProductImages")
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 }
 
 model AboutItem {
@@ -41,7 +43,7 @@ model Customer {
   phone     String?
   address   String?
   image     String?
-  orders    Order[]  // relation ke Order
+  orders    Order[]  
   createdAt DateTime @default(now())
 }
 
@@ -70,4 +72,23 @@ model OrderItem {
   quantity  Int
   image     String
   order     Order  @relation(fields: [orderId], references: [id])
+}
+
+model Transaction {
+  id          Int      @id @default(autoincrement())
+  orderNumber String   @unique
+  customerName String
+  amount      Int
+  status      String
+  date        DateTime @default(now())
+  items       TransactionItem[]
+}
+
+model TransactionItem {
+  id            Int         @id @default(autoincrement())
+  transactionId Int
+  productName   String
+  quantity      Int
+  price         Int
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
 }
